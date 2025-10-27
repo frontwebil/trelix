@@ -44,7 +44,7 @@ export function FriendsList({ onlineIds, setSidebarOpen }: FriendsListProps) {
   }
 
   const handleSideBarToggle = () => {
-    if (screenWidth > 768) return;
+    if (screenWidth && screenWidth > 768) return;
 
     setSidebarOpen(false);
   };
