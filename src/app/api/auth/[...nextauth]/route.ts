@@ -28,7 +28,7 @@ export const authOptions: AuthOptions = {
 
         if (!isValidUser) return null;
 
-        return { id: user.id, email: user.email, hasProfile: user.hasProfile };
+        return { id: user.id, email: user.email };
       },
     }),
   ],
@@ -36,29 +36,13 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, user, trigger }) {
-      if (user) {
-        token.id = user.id;
-        token.hasProfile = (user as any).hasProfile;
-      }
-      // Handle session update (e.g., after profile setup)
-      if (trigger === "update" && token.id) {
-        const updatedUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { hasProfile: true },
-        });
-        if (updatedUser) {
-          token.hasProfile = updatedUser.hasProfile;
-        }
-      }
+    async jwt({ token, user }) {
+      if (user) token.id = user.id;
       return token;
     },
     async session({ session, token }) {
       if (token?.id) {
         session.user.id = token.id as string;
-      }
-      if (token?.hasProfile !== undefined) {
-        session.user.hasProfile = token.hasProfile as boolean;
       }
       return session;
     },
