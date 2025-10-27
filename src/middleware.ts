@@ -1,6 +1,5 @@
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../lib/prisma";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
@@ -16,19 +15,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // redirect authenticated users from auth pages
+  // redirect authenticated users from auth pages to setup-profile
   if (token && (pathname === "/" || pathname === "/auth/signup")) {
-    // Check if user has profile
-    const user = await prisma.user.findUnique({
-      where: { id: token.id as string },
-      select: { hasProfile: true },
-    });
-
-    if (user?.hasProfile) {
-      return NextResponse.redirect(new URL("/chat", req.url));
-    } else {
-      return NextResponse.redirect(new URL("/auth/setup-profile", req.url));
-    }
+    return NextResponse.redirect(new URL("/auth/setup-profile", req.url));
   }
 
   return NextResponse.next();
