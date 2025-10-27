@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 export function SetupProfile() {
   const [name, setName] = useState("");
@@ -13,6 +14,7 @@ export function SetupProfile() {
   const [image, setImage] = useState<null | File>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { update } = useSession();
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,6 +50,10 @@ export function SetupProfile() {
       formData.append("avatar", image as File);
 
       await axios.post("/api/auth/setup-profile", formData);
+      
+      // Update the session to refresh the JWT token with hasProfile=true
+      await update();
+      
       toast("Profile updated succesfully", {
         style: {
           background: "#9810fa",
