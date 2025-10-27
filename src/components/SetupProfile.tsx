@@ -51,7 +51,7 @@ export function SetupProfile() {
 
       await axios.post("/api/auth/setup-profile", formData);
       
-      // Update the session to refresh the JWT token with hasProfile=true
+      // Update session to refresh hasProfile
       await update();
       
       toast("Profile updated succesfully", {
