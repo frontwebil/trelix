@@ -1,10 +1,10 @@
 "use client";
-
+import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Home() {
@@ -13,45 +13,53 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (loading) return;
 
     setLoading(true);
 
-    if (!email || !password) {
-      toast("All fields are required", {
+    try {
+      await axios.post("/api/auth/register", {
+        email,
+        password,
+      });
+      toast("Registration successful", {
         style: {
           background: "#9810fa",
           color: "white",
         },
       });
-      setLoading(false);
-      return;
-    }
+      setEmail("");
+      setPassword("");
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+      const loginRes = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (res?.error) {
-      toast("Invalid Credentials", {
-        style: {
-          background: "#9810fa",
-          color: "white",
-        },
-      });
-    } else {
-      toast("Sign in successful", {
-        style: {
-          background: "#9810fa",
-          color: "white",
-        },
-      });
-      router.replace("/auth/setup-profile");
+      if (loginRes?.error) {
+        router.replace("/");
+      } else {
+        router.replace("/auth/setup-profile");
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error.response?.data.error || "Something went wrong", {
+          style: {
+            background: "#9810fa",
+            color: "white",
+          },
+        });
+      } else {
+        toast("Network error please try again", {
+          style: {
+            background: "#9810fa",
+            color: "white",
+          },
+        });
+      }
     }
     setLoading(false);
   };
@@ -70,10 +78,10 @@ export default function Home() {
           />
         </div>
         <h2 className="text-center text-3xl font-bold mb-6 text-gray-300">
-          Sign in to your account
+          Create a new account
         </h2>
         <div className="py-6 rounded-lg shadow-md">
-          <form onSubmit={handleSignIn}>
+          <form onSubmit={handleSignUp}>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -96,12 +104,12 @@ export default function Home() {
               text-white rounded-lg cursor-pointer
               hover:from-blue-600 transition"
             >
-              {loading ? "Signing..." : "Sign in"}
+              {loading ? "Signing up..." : "Sign up"}
             </button>
             <div className="my-3 text-center text-white">
-              <span>Don&apos;t have an account</span>
-              <Link href="/auth/signup" className="ml-2 text-purple-600">
-                Sign up
+              <span>Already have an account</span>
+              <Link href="/" className="ml-2 text-purple-600">
+                Sign in
               </Link>
             </div>
           </form>
