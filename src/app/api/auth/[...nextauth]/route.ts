@@ -49,6 +49,7 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) token.id = user.id;
 
+      console.log({ token });
       console.log({ user });
 
       return token;
@@ -58,6 +59,7 @@ export const authOptions: AuthOptions = {
         session.user.id = token.id as string;
       }
 
+      console.log({ token });
       console.log({ session });
 
       return session;
