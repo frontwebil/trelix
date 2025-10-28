@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { LogoutButton } from "./LogoutButton";
-import { useGetUser } from "../../custom-hooks/useUser";
 import { SpinnerCircularFixed } from "spinners-react";
+import { useGetUser } from "../../custom-hooks/useUser";
 
 export function RightSidebar() {
   const { user, isLoading, isError } = useGetUser();
