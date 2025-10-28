@@ -21,6 +21,7 @@ export async function GET() {
         id: true,
         avatar: true,
         name: true,
+        hasProfile: true,
       },
       orderBy: {
         name: "asc",

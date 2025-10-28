@@ -52,6 +52,7 @@ export function FriendsList({ onlineIds, setSidebarOpen }: FriendsListProps) {
   return (
     <div className="mt-15">
       {users.map((user: User) => {
+        if (!user.hasProfile) return;
         const isOnline = onlineIds.includes(user.id);
         return (
           <div
