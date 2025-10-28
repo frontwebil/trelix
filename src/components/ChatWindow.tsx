@@ -89,7 +89,7 @@ export function ChatWindow({ messages }: { messages: MessageType[] }) {
                       : "bg-slate-800 rounded-bl-2xl"
                   } px-4 py-2 text-white rounded-br-2xl rounded-lg`}
                 >
-                  {message.text}
+                  <p className="break-all">{message.text}</p>
                 </div>
                 <span className="text-xs text-gray-400 mr-2">
                   {new Date(message.createdAt).toLocaleTimeString([], {
