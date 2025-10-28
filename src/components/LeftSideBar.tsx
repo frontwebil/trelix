@@ -18,14 +18,10 @@ export function LeftSideBar() {
   useEffect(() => {
     const channel = pusherClient.subscribe("presence-online-users");
 
-    // initial members list
-    channel.bind("pusher:subscription_suceeded", (members: Members) => {
-      useChatStore.setState({
-        onlineIds: Object.keys(members.members),
-      });
+    channel.bind("pusher:subscription_succeeded", (members: Members) => {
+      useChatStore.setState({ onlineIds: Object.keys(members.members) });
     });
 
-    // add logged in user as a member
     channel.bind("pusher:member_added", (member: PresenceMember) => {
       useChatStore.setState((state) => {
         if (state.onlineIds.includes(member.id)) return state;
@@ -33,7 +29,6 @@ export function LeftSideBar() {
       });
     });
 
-    // remove users when they go offline
     channel.bind("pusher:member_removed", (member: PresenceMember) => {
       useChatStore.setState((state) => ({
         onlineIds: state.onlineIds.filter((id) => id !== member.id),
@@ -41,7 +36,8 @@ export function LeftSideBar() {
     });
 
     return () => {
-      pusherClient.unsubscribe("presence-online-users");
+      channel.unbind_all();
+      channel.unsubscribe();
     };
   }, []);
 
