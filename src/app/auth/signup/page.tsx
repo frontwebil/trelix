@@ -30,14 +30,15 @@ export default function Home() {
           color: "white",
         },
       });
-      setEmail("");
-      setPassword("");
 
       const loginRes = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
+
+      setEmail("");
+      setPassword("");
 
       if (loginRes?.error) {
         router.replace("/");
