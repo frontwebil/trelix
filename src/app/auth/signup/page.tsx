@@ -5,11 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { BsEye } from "react-icons/bs";
+import { FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -18,6 +23,17 @@ export default function Home() {
     if (loading) return;
 
     setLoading(true);
+
+    if (password !== confirmPassword) {
+      toast("Passwords must be same", {
+        style: {
+          background: "#9810fa",
+          color: "white",
+        },
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       await axios.post("/api/auth/register", {
@@ -89,16 +105,46 @@ export default function Home() {
               type="text"
               placeholder="Email Address"
               className="w-full px-4 py-3
-              placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 my-3"
+              placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100"
             />
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
-              placeholder="Password"
-              className="w-full px-4 py-3
-              placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 my-3"
-            />
+            <div className="relative my-3">
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full px-4 py-3 placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 pr-10"
+                required
+              />
+              {password.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 cursor-pointer"
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <BsEye size={20} />}
+                </button>
+              )}
+            </div>
+            <div className="relative my-3">
+              <input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm password"
+                className="w-full px-4 py-3 placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 pr-10"
+                required
+              />
+              {confirmPassword.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 cursor-pointer"
+                >
+                  {showConfirm ? <FiEyeOff size={20} /> : <BsEye size={20} />}
+                </button>
+              )}
+            </div>
             <button
               className="w-full bg-gradient-to-r
              from-blue-500 to-purple-600 my-2 py-2

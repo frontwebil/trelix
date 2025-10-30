@@ -5,12 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BsEye } from "react-icons/bs";
+import { FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -82,14 +85,25 @@ export default function Home() {
               className="w-full px-4 py-3
               placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 my-3"
             />
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
-              placeholder="Password"
-              className="w-full px-4 py-3
-              placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 my-3"
-            />
+            <div className="relative my-3">
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full px-4 py-3 placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 pr-10"
+                required
+              />
+              {password.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 cursor-pointer"
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <BsEye size={20} />}
+                </button>
+              )}
+            </div>
             <button
               className="w-full bg-gradient-to-r
              from-blue-500 to-purple-600 my-2 py-2
