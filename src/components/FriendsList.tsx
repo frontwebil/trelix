@@ -19,10 +19,9 @@ type User = {
 
 type FriendsListProps = {
   onlineIds: string[];
-  setSidebarOpen: (value: boolean) => void;
 };
 
-export function FriendsList({ onlineIds, setSidebarOpen }: FriendsListProps) {
+export function FriendsList({ onlineIds }: FriendsListProps) {
   const { users, isLoading, isError } = useGetUsers();
   const { setActiveChatUser } = useChatStore();
   const screenWidth = useWindowWidth();
@@ -46,7 +45,7 @@ export function FriendsList({ onlineIds, setSidebarOpen }: FriendsListProps) {
   const handleSideBarToggle = () => {
     if (screenWidth && screenWidth > 768) return;
 
-    setSidebarOpen(false);
+    useChatStore.getState().closeSidebar();
   };
 
   return (

@@ -11,8 +11,13 @@ export function ChatWindow({ messages }: { messages: MessageType[] }) {
   const receiverId = activeChatUser?.id;
   const { data: session } = useSession();
   const currentUserId = session?.user.id;
-  const [chatMessages, setChatMessages] = useState<MessageType[]>(messages);
+  const [chatMessages, setChatMessages] = useState<MessageType[]>([]);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setChatMessages(messages);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [receiverId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -31,7 +36,9 @@ export function ChatWindow({ messages }: { messages: MessageType[] }) {
     const handleNewMessage = (message: MessageType) => {
       setChatMessages((prev) => {
         // avoid duplicate messages;
-        if (prev.some((m) => m.id === message.id)) return prev;
+        if (prev.some((m) => m.id === message.id)) {
+          return prev;
+        }
         return [...prev, message];
       });
     };
@@ -47,9 +54,9 @@ export function ChatWindow({ messages }: { messages: MessageType[] }) {
   return (
     <div
       className="flex-1 overflow-y-auto
-       p-2 space-y-4 mt-6"
+      p-4 space-y-4 mt-6"
     >
-      {messages.length === 0 ? (
+      {chatMessages.length === 0 ? (
         <div className="flex flex-col items-center justify-center space-y-4">
           <div className="text-indigo-600">
             <AiFillMessage size={50} />

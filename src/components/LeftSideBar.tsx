@@ -1,8 +1,7 @@
 "use client";
 import { LuUserRoundSearch } from "react-icons/lu";
 import { FriendsList } from "./FriendsList";
-import { AiFillMessage } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { pusherClient } from "../../lib/pusher-client";
 import { useChatStore } from "../../lib/store";
 import { Members } from "pusher-js";
@@ -12,8 +11,8 @@ type PresenceMember = {
 };
 
 export function LeftSideBar() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { onlineIds } = useChatStore();
+  const { onlineIds, isOpenSidebar } = useChatStore();
+  console.log(isOpenSidebar);
 
   useEffect(() => {
     const channel = pusherClient.subscribe("presence-online-users");
@@ -41,22 +40,11 @@ export function LeftSideBar() {
     };
   }, []);
 
-  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
   return (
     <div>
-      <button
-        onClick={toggleSidebar}
-        className="fixed bottom-3 left-3  bg-gradient-to-r
-           text-white text-xl
-            from-blue-500 to-purple-600
-             w-12 h-12 grid place-items-center rounded-full
-             z-50 cursor-pointer md:hidden"
-      >
-        <AiFillMessage />
-      </button>
       <aside
         className={`min-h-screen bg-slate-950 z-50 fixed w-full top-0 left-0 md:w-85 border-r border-border bg-background transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          isOpenSidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="relative p-4">
@@ -64,7 +52,7 @@ export function LeftSideBar() {
             className="w-full h-15 absolute
          top-0 left-0 p-4
           flex justify-between
-          items-center border-b border-border"
+          items-center"
           >
             <span className="text-2xl font-bold text-gray-400">Friends</span>
             <div
@@ -75,7 +63,7 @@ export function LeftSideBar() {
               <LuUserRoundSearch />
             </div>
           </div>
-          <FriendsList onlineIds={onlineIds} setSidebarOpen={setSidebarOpen} />
+          <FriendsList onlineIds={onlineIds} />
         </div>
       </aside>
     </div>

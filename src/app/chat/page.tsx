@@ -3,15 +3,17 @@
 import { ChatInput } from "@/components/ChatInput";
 import Image from "next/image";
 import { useChatStore } from "../../../lib/store";
-import { FaUser } from "react-icons/fa";
+import { FaArrowLeft, FaUser } from "react-icons/fa";
 import { GetMessage } from "../../../custom-hooks/useMessage";
 import { ChatWindow } from "@/components/ChatWindow";
 import { SpinnerCircularFixed } from "spinners-react";
+import { useWindowWidth } from "../../../custom-hooks/useWindowWidth";
 
 export default function Page() {
   const { activeChatUser, onlineIds } = useChatStore();
   const receiverId = activeChatUser?.id;
   const { messages, isLoading, isError } = GetMessage(receiverId);
+  const screenWidth = useWindowWidth();
 
   if (isLoading) {
     return (
@@ -45,9 +47,17 @@ export default function Page() {
     );
   }
   return (
-    <div className="flex flex-col h-screen flex-1 p-4">
-      {/* header */}
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col h-screen flex-1">
+      <div className="flex items-center gap-2 p-4 border-b border-b-border">
+        {screenWidth && screenWidth <= 768 && (
+          <div
+            onClick={() => useChatStore.getState().setSidebarOpen()}
+            className="text-gray-400 bg-transparent w-9 h-9 flex justify-center items-center rounded-full transition hover:bg-gray-900 cursor-pointer"
+          >
+            <FaArrowLeft size={18} />
+          </div>
+        )}
+
         {activeChatUser.avatar && (
           <Image
             src={activeChatUser.avatar}

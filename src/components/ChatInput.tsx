@@ -8,19 +8,23 @@ export function ChatInput() {
   const [text, setText] = useState("");
   const { activeChatUser } = useChatStore();
   const receiverId = activeChatUser?.id;
+  const [loading, setLoading] = useState(false);
 
   const handleSend = async (e: FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     if (!text) return;
     if (!receiverId) return;
+    setLoading(true);
 
     await SendMessage(text, receiverId);
     setText("");
+    setLoading(false);
   };
   return (
     <form
       onSubmit={handleSend}
-      className="pt-4 border-t border-border
+      className="p-4 border-t border-border
      flex items-center gap-2 bg-slate-950"
     >
       <input

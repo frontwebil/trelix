@@ -10,12 +10,16 @@ type ChatState = {
   onlineIds: string[];
   activeChatUser: ChatUser | null;
   setActiveChatUser: (user: ChatUser) => void;
+  isOpenSidebar: boolean;
+  closeSidebar: () => void;
+  setSidebarOpen: () => void;
 };
 
 export const useChatStore = create<ChatState>((set) => ({
   onlineIds: [],
   activeChatUser: null,
-  setActiveChatUser: (user) => {
-    set({ activeChatUser: user });
-  },
+  isOpenSidebar: true,
+  setActiveChatUser: (user) => set({ activeChatUser: user }),
+  closeSidebar: () => set({ isOpenSidebar: false }), // исправлено
+  setSidebarOpen: () => set({ isOpenSidebar: true }), // исправлено
 }));
