@@ -20,7 +20,6 @@ export function SetupProfile() {
       setImagePreview(URL.createObjectURL(file));
       setImage(file);
     }
-    console.log(file);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

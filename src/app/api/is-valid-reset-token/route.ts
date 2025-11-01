@@ -4,7 +4,6 @@ import prisma from "../../../../lib/prisma";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
-  console.log(token , searchParams);
 
   if (!token) {
     return NextResponse.json({ error: "Token is missing" }, { status: 400 });

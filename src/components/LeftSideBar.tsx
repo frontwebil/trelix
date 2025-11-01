@@ -12,7 +12,6 @@ type PresenceMember = {
 
 export function LeftSideBar() {
   const { onlineIds, isOpenSidebar } = useChatStore();
-  console.log(isOpenSidebar);
 
   useEffect(() => {
     const channel = pusherClient.subscribe("presence-online-users");
