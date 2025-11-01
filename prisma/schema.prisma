@@ -24,6 +24,9 @@ model User {
 
   createdAt DateTime @default(now())
 
+  resetToken       String?
+  resetTokenExpiry DateTime?
+
   // Relationships
   sentMessages    Message[] @relation("sentMessages")
   receiveMessages Message[] @relation("receivedMessages")

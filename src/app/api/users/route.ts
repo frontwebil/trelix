@@ -20,6 +20,7 @@ export async function GET() {
       select: {
         id: true,
         avatar: true,
+        bio: true,
         name: true,
         hasProfile: true,
       },

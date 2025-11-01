@@ -8,6 +8,7 @@ import { useState } from "react";
 import { BsEye } from "react-icons/bs";
 import { FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
+import { AuthButtons } from "../components/AuthButtons";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -72,7 +73,8 @@ export default function Home() {
             priority
           />
         </div>
-        <h2 className="text-center text-3xl font-bold mb-6 text-gray-300">
+        <AuthButtons />
+        <h2 className="text-center text-3xl font-bold mb-2 text-gray-300">
           Sign in to your account
         </h2>
         <div className="py-6 rounded-lg shadow-md">
@@ -110,12 +112,12 @@ export default function Home() {
               text-white rounded-lg cursor-pointer
               hover:from-blue-600 transition"
             >
-              {loading ? "Signing..." : "Sign in"}
+              {loading ? "Signing..." : "Login"}
             </button>
             <div className="my-3 text-center text-white">
-              <span>Don&apos;t have an account</span>
-              <Link href="/auth/signup" className="ml-2 text-purple-600">
-                Sign up
+              <span>Forgot your password?</span>
+              <Link href="/reset-password" className="ml-2 text-purple-600">
+                Reset password
               </Link>
             </div>
           </form>

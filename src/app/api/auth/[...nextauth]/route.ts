@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 export const authOptions: AuthOptions = {
   providers: [
     Credentials({
-      name: "Credantials",
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "text" },
@@ -15,13 +15,10 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
-        console.log({ credentials });
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email.toLowerCase().trim() },
         });
-
-        console.log({ user });
 
         if (!user) {
           return null;
@@ -31,8 +28,6 @@ export const authOptions: AuthOptions = {
           credentials.password,
           user.password
         );
-
-        console.log({ isValidUser });
 
         if (!isValidUser) {
           return null;
@@ -49,18 +44,12 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) token.id = user.id;
 
-      console.log({ token });
-      console.log({ user });
-
       return token;
     },
     async session({ session, token }) {
       if (token?.id) {
         session.user.id = token.id as string;
       }
-
-      console.log({ token });
-      console.log({ session });
 
       return session;
     },

@@ -1,4 +1,5 @@
 "use client";
+import { AuthButtons } from "@/components/AuthButtons";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -94,6 +95,7 @@ export default function Home() {
             priority
           />
         </div>
+        <AuthButtons />
         <h2 className="text-center text-3xl font-bold mb-6 text-gray-300">
           Create a new account
         </h2>
