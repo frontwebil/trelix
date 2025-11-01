@@ -20,12 +20,14 @@ export default function ConfirmResetPassword() {
       const res = await axios.get(`/api/is-valid-reset-token?token=${token}`);
       setIsValidToken(res.data.isValidToken);
     } catch (error) {
+      console.log(error);
       setIsValidToken(false);
     }
   };
 
   useEffect(() => {
     isValidTokenHandler();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ✅ Якщо токен невалідний — редирект
