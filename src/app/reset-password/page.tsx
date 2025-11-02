@@ -73,7 +73,7 @@ export default function ResetPassword() {
               disabled={loading}
               className={`w-full bg-gradient-to-r
     from-blue-500 to-purple-600 my-2 py-2
-    text-white rounded-lg transition
+    text-white rounded-lg transition cursor-pointer
     ${loading ? "opacity-70 cursor-not-allowed" : "hover:from-blue-600"}`}
             >
               {loading ? "Sending..." : "Send reset link"}

@@ -15,5 +15,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ isValidToken: false });
   }
 
+  if (user.resetTokenExpiry && Date.now() > user.resetTokenExpiry.getTime()) {
+    return NextResponse.json({ isValidToken: false });
+  }
+
   return NextResponse.json({ isValidToken: true });
 }

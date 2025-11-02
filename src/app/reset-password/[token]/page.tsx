@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BsEye } from "react-icons/bs";
+import { FiEyeOff } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 export default function ConfirmResetPassword() {
@@ -14,6 +16,9 @@ export default function ConfirmResetPassword() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [isValidToken, setIsValidToken] = useState<boolean | null>(null);
+
+  const [isHiddenPass, setIsHiddenPass] = useState(false);
+  const [isHiddenConfPass, setIsHiddenConfPass] = useState(false);
 
   const isValidTokenHandler = async () => {
     try {
@@ -97,23 +102,48 @@ export default function ConfirmResetPassword() {
 
         <div className="rounded-lg shadow-md">
           <form onSubmit={handleConfirmReset}>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="New password"
-              className="w-full px-4 py-3
-              placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 my-3"
-            />
-
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm password"
-              className="w-full px-4 py-3
-              placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 my-3"
-            />
+            <div className="relative my-3">
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={isHiddenPass ? "text" : "password"}
+                placeholder="New Password"
+                className="w-full px-4 py-3 placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 pr-10"
+                required
+              />
+              {password.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setIsHiddenPass((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 cursor-pointer"
+                >
+                  {isHiddenPass ? <FiEyeOff size={20} /> : <BsEye size={20} />}
+                </button>
+              )}
+            </div>
+            <div className="relative my-3">
+              <input
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type={isHiddenConfPass ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="w-full px-4 py-3 placeholder-gray-300 bg-input-bg rounded-lg outline-none text-gray-100 pr-10"
+                required
+              />
+              {confirmPassword.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setIsHiddenConfPass((p) => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 cursor-pointer"
+                >
+                  {isHiddenConfPass ? (
+                    <FiEyeOff size={20} />
+                  ) : (
+                    <BsEye size={20} />
+                  )}
+                </button>
+              )}
+            </div>
 
             <button
               type="submit"
